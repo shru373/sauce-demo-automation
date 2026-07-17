@@ -35,6 +35,11 @@ public abstract class BaseTest {
         }
     }
 
+    /** Exposed so listeners can reach the live browser, e.g. to screenshot a failure. */
+    public WebDriver getDriver() {
+        return driver;
+    }
+
     private static WebDriver createDriver(String browser, boolean headless) {
         return switch (browser.toLowerCase()) {
             case "chrome" -> {

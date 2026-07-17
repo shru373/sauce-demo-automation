@@ -35,6 +35,8 @@ src/test/java/com/saucedemo/
 │   ├── BasePage.java        # shared waits and element helpers
 │   ├── LoginPage.java       # the login form
 │   └── InventoryPage.java   # the product listing
+├── listeners/
+│   └── ScreenshotListener.java  # screenshots failures
 └── tests/
     ├── BaseTest.java        # browser lifecycle (fresh driver per test)
     └── LoginTest.java       # login scenarios
@@ -52,6 +54,8 @@ src/test/resources/
 
 **A fresh browser per test method.** Slower than sharing one session, but each test starts from a known-clean state and no test can leak state into another. This is the precondition for running the suite in parallel.
 
+**Failures screenshot themselves.** `ScreenshotListener` writes a PNG to `target/screenshots/` whenever a test fails, named after the test and its data set (`LoginTest.validUserReachesInventory-problem_user-<timestamp>.png`). TestNG fires the listener before `@AfterMethod`, so the browser is still alive when the picture is taken. A screenshot that fails to save is logged and swallowed, never masking the test failure that triggered it.
+
 ## Coverage
 
 The login suite exercises both the happy path and the failure modes SauceDemo deliberately ships:
@@ -66,7 +70,7 @@ The login suite exercises both the happy path and the failure modes SauceDemo de
 
 - [ ] Cart and checkout flows
 - [ ] Product sorting assertions
-- [ ] Screenshot capture on failure via a TestNG listener
+- [x] Screenshot capture on failure via a TestNG listener
 - [ ] Parallel execution
 - [ ] Allure reporting
 - [ ] CI on GitHub Actions
