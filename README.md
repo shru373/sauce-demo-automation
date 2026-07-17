@@ -1,0 +1,72 @@
+# sauce-demo-automation
+
+UI test automation suite for [saucedemo.com](https://www.saucedemo.com/), built with Selenium WebDriver and TestNG using the Page Object Model.
+
+## Stack
+
+| | |
+|---|---|
+| Language | Java 21 |
+| Build | Maven 3.9 |
+| Browser automation | Selenium WebDriver 4.33 |
+| Test framework | TestNG 7.11 |
+| Design pattern | Page Object Model |
+
+Driver binaries are resolved automatically by [Selenium Manager](https://www.selenium.dev/documentation/selenium_manager/), so there is no `chromedriver.exe` to download, check in, or keep in sync with your browser.
+
+## Running the tests
+
+```bash
+mvn test
+```
+
+Tests run headless by default. Useful overrides:
+
+```bash
+mvn test -Dheadless=false        # watch the browser drive itself
+mvn test -Dbrowser=firefox       # chrome (default) or firefox
+```
+
+## Project layout
+
+```
+src/test/java/com/saucedemo/
+├── pages/
+│   ├── BasePage.java        # shared waits and element helpers
+│   ├── LoginPage.java       # the login form
+│   └── InventoryPage.java   # the product listing
+└── tests/
+    ├── BaseTest.java        # browser lifecycle (fresh driver per test)
+    └── LoginTest.java       # login scenarios
+src/test/resources/
+└── testng.xml               # suite definition
+```
+
+## Design notes
+
+**Page objects expose intent, not mechanics.** A test says `loginAs("standard_user", PASSWORD)`, not "type into `#user-name`, type into `#password`, click `#login-button`". Locators live in exactly one place, so a markup change is a one-line fix rather than a suite-wide rewrite.
+
+**Two login methods, on purpose.** `loginAs` returns an `InventoryPage`, `loginExpectingFailure` returns a `LoginPage`. The return type encodes where you end up, so a test that expects a rejection can't accidentally assert against a page it never reached.
+
+**Explicit waits only.** Every lookup goes through `WebDriverWait` in `BasePage`. There are no `Thread.sleep` calls and no implicit wait, which is what keeps the suite from being flaky against `performance_glitch_user` (a deliberately slow account) without padding every test with dead time.
+
+**A fresh browser per test method.** Slower than sharing one session, but each test starts from a known-clean state and no test can leak state into another. This is the precondition for running the suite in parallel.
+
+## Coverage
+
+The login suite exercises both the happy path and the failure modes SauceDemo deliberately ships:
+
+- `standard_user`, `problem_user`, `performance_glitch_user` all reach the inventory page with all 6 products rendered (data-driven via `@DataProvider`)
+- `locked_out_user` is rejected with the lockout message
+- A wrong password is rejected without disclosing which field was wrong
+- A blank username is rejected
+- A blank password is rejected
+
+## Roadmap
+
+- [ ] Cart and checkout flows
+- [ ] Product sorting assertions
+- [ ] Screenshot capture on failure via a TestNG listener
+- [ ] Parallel execution
+- [ ] Allure reporting
+- [ ] CI on GitHub Actions
