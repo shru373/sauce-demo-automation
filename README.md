@@ -56,6 +56,8 @@ src/test/resources/
 
 **Failures screenshot themselves.** `ScreenshotListener` writes a PNG to `target/screenshots/` whenever a test fails, named after the test and its data set (`LoginTest.validUserReachesInventory-problem_user-<timestamp>.png`). TestNG fires the listener before `@AfterMethod`, so the browser is still alive when the picture is taken. A screenshot that fails to save is logged and swallowed, never masking the test failure that triggered it.
 
+**Interactions degrade gracefully.** The checkout form is React-controlled, and in some browser/driver combinations it silently ignores synthesized keystrokes and clicks — the field stays empty, or Continue does nothing but reload. `BasePage.type` and `BasePage.navigate` try the real user interaction first and, only when it demonstrably didn't take (the value didn't stick, or the URL didn't change), fall back to a JavaScript path that dispatches the event React listens for. Pages where normal interaction works (e.g. login) never hit the fallback, so the suite still exercises genuine typing and clicking wherever it can.
+
 ## Coverage
 
 **Login** exercises both the happy path and the failure modes SauceDemo deliberately ships:
@@ -72,6 +74,12 @@ src/test/resources/
 - The cart page lists exactly the products that were added
 - Removing the last item empties the cart
 - Continue shopping returns to the inventory page
+
+**Checkout** walks the full purchase journey across all three checkout pages:
+
+- A user can complete checkout and reach the "Thank you for your order!" confirmation
+- The overview page lists the products being purchased
+- Back home from the confirmation returns to the inventory page
 
 ## Roadmap
 

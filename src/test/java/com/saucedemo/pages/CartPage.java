@@ -12,6 +12,7 @@ public class CartPage extends BasePage {
     private static final By CART_ITEM = By.cssSelector("[data-test='inventory-item']");
     private static final By ITEM_NAME = By.cssSelector("[data-test='inventory-item-name']");
     private static final By CONTINUE_SHOPPING = By.cssSelector("[data-test='continue-shopping']");
+    private static final By CHECKOUT = By.cssSelector("[data-test='checkout']");
 
     public CartPage(WebDriver driver) {
         super(driver);
@@ -43,11 +44,14 @@ public class CartPage extends BasePage {
     }
 
     public InventoryPage continueShopping() {
-        click(CONTINUE_SHOPPING);
+        navigate(CONTINUE_SHOPPING, "inventory.html");
         return new InventoryPage(driver);
     }
 
-    // checkout() arrives in Milestone 2, once CheckoutInformationPage exists to return.
+    public CheckoutInformationPage checkout() {
+        navigate(CHECKOUT, "checkout-step-one");
+        return new CheckoutInformationPage(driver);
+    }
 
     private static By removeButton(String productName) {
         return By.xpath(

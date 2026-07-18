@@ -18,4 +18,10 @@
     </classes>
   </test>
 
+  <test name="Checkout">
+    <classes>
+      <class name="com.saucedemo.tests.CheckoutTest"/>
+    </classes>
+  </test>
+
 </suite>

@@ -3,7 +3,9 @@ package com.saucedemo.pages;
 import java.time.Duration;
 import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -37,14 +39,53 @@ public abstract class BasePage {
         clickable(locator).click();
     }
 
+    private void jsClick(By locator) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", clickable(locator));
+    }
+
+    /**
+     * Clicks a control that navigates to another page, then confirms we arrived.
+     *
+     * On this app's checkout pages, a normal Selenium click doesn't always reach React's
+     * handler (the same reason typing needs a JS fallback in {@link #type}); the browser
+     * then does a plain form submit that just reloads the page, so we appear stuck. If the
+     * first click doesn't take us to the destination, we retry it as a JavaScript click,
+     * which dispatches an event React does react to. Idempotent navigation makes this safe.
+     */
+    protected void navigate(By control, String destinationUrlFragment) {
+        click(control);
+        try {
+            wait.until(ExpectedConditions.urlContains(destinationUrlFragment));
+        } catch (TimeoutException firstClickIgnored) {
+            jsClick(control);
+            wait.until(ExpectedConditions.urlContains(destinationUrlFragment));
+        }
+    }
+
     protected void type(By locator, String text) {
         WebElement field = visible(locator);
         field.clear();
-        // sendKeys with an empty string is rejected by some drivers; clearing is
-        // enough to represent "the user left this field blank".
-        if (text != null && !text.isEmpty()) {
-            field.sendKeys(text);
+        // Clearing alone represents "the user left this field blank"; sendKeys rejects "".
+        if (text == null || text.isEmpty()) {
+            return;
         }
+        field.sendKeys(text);
+        // Some of this app's React-controlled inputs (the checkout form) silently swallow
+        // synthesized keystrokes, leaving the field empty. Where sendKeys works (e.g. login)
+        // we keep the real typing; only when it didn't take do we fall back to setting the
+        // value natively and firing the input event React listens for.
+        if (!text.equals(field.getAttribute("value"))) {
+            setValueViaReact(field, text);
+        }
+    }
+
+    private void setValueViaReact(WebElement field, String text) {
+        ((JavascriptExecutor) driver).executeScript(
+            "const el = arguments[0], value = arguments[1];"
+                + "const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;"
+                + "setter.call(el, value);"
+                + "el.dispatchEvent(new Event('input', { bubbles: true }));",
+            field, text);
     }
 
     protected String textOf(By locator) {

@@ -52,7 +52,7 @@ public class InventoryPage extends BasePage {
     }
 
     public CartPage openCart() {
-        click(CART_LINK);
+        navigate(CART_LINK, "cart.html");
         return new CartPage(driver);
     }
 
