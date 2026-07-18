@@ -12,4 +12,10 @@
     </classes>
   </test>
 
+  <test name="Cart">
+    <classes>
+      <class name="com.saucedemo.tests.CartTest"/>
+    </classes>
+  </test>
+
 </suite>

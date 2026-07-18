@@ -1,6 +1,7 @@
 package com.saucedemo.pages;
 
 import java.time.Duration;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -48,6 +49,16 @@ public abstract class BasePage {
 
     protected String textOf(By locator) {
         return visible(locator).getText();
+    }
+
+    /** The text of every element matching the locator, in document order. Empty if none match. */
+    protected List<String> textsOf(By locator) {
+        return driver.findElements(locator).stream().map(WebElement::getText).toList();
+    }
+
+    /** Blocks until nothing matching the locator is present or visible. */
+    protected void waitGone(By locator) {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
     protected boolean isDisplayed(By locator) {

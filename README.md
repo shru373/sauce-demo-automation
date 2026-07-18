@@ -58,13 +58,20 @@ src/test/resources/
 
 ## Coverage
 
-The login suite exercises both the happy path and the failure modes SauceDemo deliberately ships:
+**Login** exercises both the happy path and the failure modes SauceDemo deliberately ships:
 
 - `standard_user`, `problem_user`, `performance_glitch_user` all reach the inventory page with all 6 products rendered (data-driven via `@DataProvider`)
 - `locked_out_user` is rejected with the lockout message
 - A wrong password is rejected without disclosing which field was wrong
 - A blank username is rejected
 - A blank password is rejected
+
+**Cart** covers adding and removing products from both the inventory listing and the cart page:
+
+- The cart badge is absent on an empty cart, and counts up and down as items are added and removed
+- The cart page lists exactly the products that were added
+- Removing the last item empties the cart
+- Continue shopping returns to the inventory page
 
 ## Roadmap
 
