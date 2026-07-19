@@ -39,7 +39,8 @@ public abstract class BasePage {
         clickable(locator).click();
     }
 
-    private void jsClick(By locator) {
+    /** Clicks via JavaScript so the event reaches React even when a native click is ignored. */
+    protected void jsClick(By locator) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", clickable(locator));
     }
 

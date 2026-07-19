@@ -80,10 +80,12 @@ src/test/resources/
 - A user can complete checkout and reach the "Thank you for your order!" confirmation
 - The overview page lists the products being purchased
 - Back home from the confirmation returns to the inventory page
+- The grand total equals the item total plus tax, and the item total equals the sum of the line-item prices (the site's own arithmetic is verified, not just that a page loaded)
+- The information form rejects a blank first name, last name, or postal code with the correct message
 
 ## Roadmap
 
-- [ ] Cart and checkout flows
+- [x] Cart and checkout flows
 - [ ] Product sorting assertions
 - [x] Screenshot capture on failure via a TestNG listener
 - [ ] Parallel execution

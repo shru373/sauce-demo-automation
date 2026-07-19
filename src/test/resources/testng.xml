@@ -24,4 +24,10 @@
     </classes>
   </test>
 
+  <test name="Checkout validation">
+    <classes>
+      <class name="com.saucedemo.tests.CheckoutValidationTest"/>
+    </classes>
+  </test>
+
 </suite>

@@ -38,9 +38,13 @@ public class CheckoutInformationPage extends BasePage {
         return new CheckoutOverviewPage(driver);
     }
 
-    /** Clicks Continue but stays here, for cases where the form is expected to be rejected. */
+    /**
+     * Clicks Continue but stays here, for cases where the form is expected to be rejected.
+     * Uses a JS click because this app's form ignores a native click (see BasePage.navigate),
+     * and a click that never reaches React would never raise the validation error we assert on.
+     */
     public CheckoutInformationPage continueExpectingError() {
-        click(CONTINUE);
+        jsClick(CONTINUE);
         return this;
     }
 

@@ -14,6 +14,7 @@ public class CheckoutTest extends BaseTest {
 
     private static final String PASSWORD = "secret_sauce";
     private static final String BACKPACK = "Sauce Labs Backpack";
+    private static final String BIKE_LIGHT = "Sauce Labs Bike Light";
 
     private InventoryPage inventory;
 
@@ -49,6 +50,34 @@ public class CheckoutTest extends BaseTest {
         assertTrue(overview.isLoaded(), "Expected the checkout overview page");
         assertEquals(overview.title(), "Checkout: Overview");
         assertTrue(overview.itemNames().contains(BACKPACK), "Overview should list " + BACKPACK);
+    }
+
+    @Test(description = "The grand total equals the item total plus tax")
+    public void grandTotalIsItemTotalPlusTax() {
+        CheckoutOverviewPage overview = inventory
+                .addToCart(BACKPACK)
+                .addToCart(BIKE_LIGHT)
+                .openCart()
+                .checkout()
+                .enterInformation("Shrutina", "Prajapati", "12345")
+                .continueToOverview();
+
+        assertEquals(overview.total(), overview.itemTotal() + overview.tax(), 0.001,
+                "Grand total should be the item total plus tax");
+    }
+
+    @Test(description = "The item total equals the sum of the individual product prices")
+    public void itemTotalIsSumOfLineItems() {
+        CheckoutOverviewPage overview = inventory
+                .addToCart(BACKPACK)
+                .addToCart(BIKE_LIGHT)
+                .openCart()
+                .checkout()
+                .enterInformation("Shrutina", "Prajapati", "12345")
+                .continueToOverview();
+
+        assertEquals(overview.itemTotal(), overview.lineItemsSum(), 0.001,
+                "Item total should be the sum of the line-item prices");
     }
 
     @Test(description = "Back home from the confirmation returns to the inventory")
