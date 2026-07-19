@@ -15,6 +15,11 @@ public class InventoryPage extends BasePage {
     private static final By SORT = By.cssSelector("[data-test='product-sort-container']");
     private static final By ITEM_NAME = By.cssSelector("[data-test='inventory-item-name']");
     private static final By ITEM_PRICE = By.cssSelector("[data-test='inventory-item-price']");
+    private static final By MENU_BUTTON = By.id("react-burger-menu-btn");
+    private static final By MENU_CLOSE = By.id("react-burger-cross-btn");
+    private static final By LOGOUT = By.cssSelector("[data-test='logout-sidebar-link']");
+    private static final By RESET = By.cssSelector("[data-test='reset-sidebar-link']");
+    private static final By LOGIN_BUTTON = By.id("login-button");
 
     public InventoryPage(WebDriver driver) {
         super(driver);
@@ -63,6 +68,27 @@ public class InventoryPage extends BasePage {
     /** Chooses a sort order by the dropdown's option value: az, za, lohi, or hilo. */
     public InventoryPage sortBy(String optionValue) {
         new Select(visible(SORT)).selectByValue(optionValue);
+        return this;
+    }
+
+    /** Opens the hamburger menu and waits for it to slide open. */
+    private void openMenu() {
+        click(MENU_BUTTON);
+        clickable(LOGOUT); // any menu item appearing means the panel is open
+    }
+
+    /** Logs out via the menu, returning to the login screen. */
+    public LoginPage logout() {
+        openMenu();
+        navigateToElement(LOGOUT, LOGIN_BUTTON);
+        return new LoginPage(driver);
+    }
+
+    /** Resets the app state (clears the cart), then closes the menu. Stays on this page. */
+    public InventoryPage resetAppState() {
+        openMenu();
+        jsClick(RESET); // a menu onClick action with nothing to navigate to; JS makes it reliable
+        click(MENU_CLOSE);
         return this;
     }
 

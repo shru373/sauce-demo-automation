@@ -22,6 +22,10 @@ public class LoginPage extends BasePage {
         return this;
     }
 
+    public boolean isLoaded() {
+        return isDisplayed(LOGIN_BUTTON);
+    }
+
     /** Submits credentials that are expected to succeed. */
     public InventoryPage loginAs(String username, String password) {
         submitCredentials(username, password);

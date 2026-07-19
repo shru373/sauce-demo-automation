@@ -24,6 +24,12 @@
     </classes>
   </test>
 
+  <test name="Menu">
+    <classes>
+      <class name="com.saucedemo.tests.MenuTest"/>
+    </classes>
+  </test>
+
   <test name="Checkout">
     <classes>
       <class name="com.saucedemo.tests.CheckoutTest"/>

@@ -70,6 +70,8 @@ src/test/resources/
 
 **Product sorting** checks the inventory sort dropdown actually reorders the listing — name A–Z and Z–A, price low–high and high–low — by asserting the displayed order matches a freshly sorted copy.
 
+**Menu** exercises the hamburger menu: logging out returns to the login screen, and Reset App State empties the cart.
+
 **Cart** covers adding and removing products from both the inventory listing and the cart page:
 
 - The cart badge is absent on an empty cart, and counts up and down as items are added and removed

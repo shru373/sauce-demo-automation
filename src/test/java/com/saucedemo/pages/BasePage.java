@@ -63,6 +63,17 @@ public abstract class BasePage {
         }
     }
 
+    /** Like {@link #navigate}, but confirms arrival by an element appearing rather than a URL. */
+    protected void navigateToElement(By control, By destinationMarker) {
+        click(control);
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(destinationMarker));
+        } catch (TimeoutException firstClickIgnored) {
+            jsClick(control);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(destinationMarker));
+        }
+    }
+
     protected void type(By locator, String text) {
         WebElement field = visible(locator);
         field.clear();
