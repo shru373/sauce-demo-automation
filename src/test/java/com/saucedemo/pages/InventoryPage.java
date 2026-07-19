@@ -20,6 +20,9 @@ public class InventoryPage extends BasePage {
     private static final By LOGOUT = By.cssSelector("[data-test='logout-sidebar-link']");
     private static final By RESET = By.cssSelector("[data-test='reset-sidebar-link']");
     private static final By LOGIN_BUTTON = By.id("login-button");
+    private static final By TWITTER = By.cssSelector("[data-test='social-twitter']");
+    private static final By FACEBOOK = By.cssSelector("[data-test='social-facebook']");
+    private static final By LINKEDIN = By.cssSelector("[data-test='social-linkedin']");
 
     public InventoryPage(WebDriver driver) {
         super(driver);
@@ -92,6 +95,14 @@ public class InventoryPage extends BasePage {
         return this;
     }
 
+    /** Opens a product's own page by clicking its name. */
+    public ProductDetailPage openProduct(String productName) {
+        By nameLink = By.xpath(
+            "//div[@data-test='inventory-item-name'][normalize-space()='" + productName + "']");
+        navigate(nameLink, "inventory-item.html");
+        return new ProductDetailPage(driver);
+    }
+
     /** Product names in the order currently displayed. */
     public List<String> productNames() {
         return textsOf(ITEM_NAME);
@@ -102,6 +113,18 @@ public class InventoryPage extends BasePage {
         return textsOf(ITEM_PRICE).stream()
                 .map(price -> Double.parseDouble(price.replace("$", "").trim()))
                 .toList();
+    }
+
+    public String twitterLink() {
+        return attributeOf(TWITTER, "href");
+    }
+
+    public String facebookLink() {
+        return attributeOf(FACEBOOK, "href");
+    }
+
+    public String linkedinLink() {
+        return attributeOf(LINKEDIN, "href");
     }
 
     // Each product card holds exactly one button, toggling between "Add to cart" and "Remove".

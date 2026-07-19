@@ -42,4 +42,16 @@
     </classes>
   </test>
 
+  <test name="Product detail">
+    <classes>
+      <class name="com.saucedemo.tests.ProductDetailTest"/>
+    </classes>
+  </test>
+
+  <test name="Footer">
+    <classes>
+      <class name="com.saucedemo.tests.FooterTest"/>
+    </classes>
+  </test>
+
 </suite>

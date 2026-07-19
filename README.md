@@ -72,6 +72,10 @@ src/test/resources/
 
 **Menu** exercises the hamburger menu: logging out returns to the login screen, and Reset App State empties the cart.
 
+**Product detail** confirms clicking a product opens its own page with the matching name, and that "Back to products" returns to the inventory.
+
+**Footer** asserts the social links point at the right destinations (Twitter/X, Facebook, LinkedIn) by checking the `href`, without following the link off-site.
+
 **Cart** covers adding and removing products from both the inventory listing and the cart page:
 
 - The cart badge is absent on an empty cart, and counts up and down as items are added and removed

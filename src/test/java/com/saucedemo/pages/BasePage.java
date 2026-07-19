@@ -104,6 +104,10 @@ public abstract class BasePage {
         return visible(locator).getText();
     }
 
+    protected String attributeOf(By locator, String attribute) {
+        return visible(locator).getAttribute(attribute);
+    }
+
     /** The text of every element matching the locator, in document order. Empty if none match. */
     protected List<String> textsOf(By locator) {
         return driver.findElements(locator).stream().map(WebElement::getText).toList();
