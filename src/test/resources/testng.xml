@@ -18,6 +18,12 @@
     </classes>
   </test>
 
+  <test name="Product sorting">
+    <classes>
+      <class name="com.saucedemo.tests.ProductSortTest"/>
+    </classes>
+  </test>
+
   <test name="Checkout">
     <classes>
       <class name="com.saucedemo.tests.CheckoutTest"/>

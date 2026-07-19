@@ -68,6 +68,8 @@ src/test/resources/
 - A blank username is rejected
 - A blank password is rejected
 
+**Product sorting** checks the inventory sort dropdown actually reorders the listing — name A–Z and Z–A, price low–high and high–low — by asserting the displayed order matches a freshly sorted copy.
+
 **Cart** covers adding and removing products from both the inventory listing and the cart page:
 
 - The cart badge is absent on an empty cart, and counts up and down as items are added and removed
@@ -86,7 +88,7 @@ src/test/resources/
 ## Roadmap
 
 - [x] Cart and checkout flows
-- [ ] Product sorting assertions
+- [x] Product sorting assertions
 - [x] Screenshot capture on failure via a TestNG listener
 - [ ] Parallel execution
 - [ ] Allure reporting

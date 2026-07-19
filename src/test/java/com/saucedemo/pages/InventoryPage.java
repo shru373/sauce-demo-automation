@@ -4,6 +4,7 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 public class InventoryPage extends BasePage {
 
@@ -11,6 +12,9 @@ public class InventoryPage extends BasePage {
     private static final By INVENTORY_ITEM = By.className("inventory_item");
     private static final By CART_LINK = By.cssSelector("[data-test='shopping-cart-link']");
     private static final By CART_BADGE = By.cssSelector("[data-test='shopping-cart-badge']");
+    private static final By SORT = By.cssSelector("[data-test='product-sort-container']");
+    private static final By ITEM_NAME = By.cssSelector("[data-test='inventory-item-name']");
+    private static final By ITEM_PRICE = By.cssSelector("[data-test='inventory-item-price']");
 
     public InventoryPage(WebDriver driver) {
         super(driver);
@@ -54,6 +58,24 @@ public class InventoryPage extends BasePage {
     public CartPage openCart() {
         navigate(CART_LINK, "cart.html");
         return new CartPage(driver);
+    }
+
+    /** Chooses a sort order by the dropdown's option value: az, za, lohi, or hilo. */
+    public InventoryPage sortBy(String optionValue) {
+        new Select(visible(SORT)).selectByValue(optionValue);
+        return this;
+    }
+
+    /** Product names in the order currently displayed. */
+    public List<String> productNames() {
+        return textsOf(ITEM_NAME);
+    }
+
+    /** Product prices in the order currently displayed, e.g. [7.99, 9.99, ...]. */
+    public List<Double> productPrices() {
+        return textsOf(ITEM_PRICE).stream()
+                .map(price -> Double.parseDouble(price.replace("$", "").trim()))
+                .toList();
     }
 
     // Each product card holds exactly one button, toggling between "Add to cart" and "Remove".
