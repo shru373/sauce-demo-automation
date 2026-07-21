@@ -1,6 +1,8 @@
 # sauce-demo-automation
 
-UI test automation suite for [saucedemo.com](https://www.saucedemo.com/), built with Selenium WebDriver and TestNG using the Page Object Model.
+[![Tests](https://github.com/shru373/sauce-demo-automation/actions/workflows/tests.yml/badge.svg)](https://github.com/shru373/sauce-demo-automation/actions/workflows/tests.yml)
+
+UI test automation suite for [saucedemo.com](https://www.saucedemo.com/), built with Selenium WebDriver and TestNG using the Page Object Model. 32 tests run automatically on every push via GitHub Actions.
 
 ## Stack
 
@@ -98,4 +100,4 @@ src/test/resources/
 - [x] Screenshot capture on failure via a TestNG listener
 - [ ] Parallel execution
 - [ ] Allure reporting
-- [ ] CI on GitHub Actions
+- [x] CI on GitHub Actions
