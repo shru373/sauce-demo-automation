@@ -43,17 +43,16 @@ public class InventoryPage extends BasePage {
 
     /** Adds a product to the cart by its visible name, then waits until the add is confirmed. */
     public InventoryPage addToCart(String productName) {
-        click(addButton(productName));
         // The button flips from "Add to cart" to "Remove" once the item is in the cart;
-        // waiting for that flip means the badge has settled before any test reads it.
-        visible(removeButton(productName));
+        // waiting for that flip means the badge has settled before any test reads it, and
+        // lets us retry the click (some React clicks are swallowed, especially on Linux CI).
+        clickUntilVisible(addButton(productName), removeButton(productName));
         return this;
     }
 
     /** Removes a product from the cart via the inventory listing, then waits until the removal is confirmed. */
     public InventoryPage removeFromCart(String productName) {
-        click(removeButton(productName));
-        visible(addButton(productName));
+        clickUntilVisible(removeButton(productName), addButton(productName));
         return this;
     }
 
@@ -83,7 +82,7 @@ public class InventoryPage extends BasePage {
     /** Logs out via the menu, returning to the login screen. */
     public LoginPage logout() {
         openMenu();
-        navigateToElement(LOGOUT, LOGIN_BUTTON);
+        clickUntilVisible(LOGOUT, LOGIN_BUTTON);
         return new LoginPage(driver);
     }
 

@@ -63,14 +63,30 @@ public abstract class BasePage {
         }
     }
 
-    /** Like {@link #navigate}, but confirms arrival by an element appearing rather than a URL. */
-    protected void navigateToElement(By control, By destinationMarker) {
+    /**
+     * Clicks a control and confirms an expected element appears, retrying the click via
+     * JavaScript if the native one was ignored. Same resilience as {@link #navigate}, but
+     * for actions that reveal an element instead of changing the URL (e.g. the add-to-cart
+     * button flipping to "Remove", or landing on the login screen after logout).
+     */
+    protected void clickUntilVisible(By control, By expected) {
         click(control);
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(destinationMarker));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(expected));
         } catch (TimeoutException firstClickIgnored) {
             jsClick(control);
-            wait.until(ExpectedConditions.visibilityOfElementLocated(destinationMarker));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(expected));
+        }
+    }
+
+    /** Clicks a control and confirms it disappears, retrying via JavaScript if ignored. */
+    protected void clickUntilGone(By control) {
+        click(control);
+        try {
+            waitGone(control);
+        } catch (TimeoutException firstClickIgnored) {
+            jsClick(control);
+            waitGone(control);
         }
     }
 

@@ -37,9 +37,7 @@ public class CartPage extends BasePage {
 
     /** Removes a product from the cart, then waits until its row is gone. */
     public CartPage removeItem(String productName) {
-        By removeButton = removeButton(productName);
-        click(removeButton);
-        waitGone(removeButton);
+        clickUntilGone(removeButton(productName));
         return this;
     }
 
