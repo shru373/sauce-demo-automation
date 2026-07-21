@@ -73,10 +73,9 @@ public class InventoryPage extends BasePage {
         return this;
     }
 
-    /** Opens the hamburger menu and waits for it to slide open. */
+    /** Opens the hamburger menu and waits for it to slide open (retrying the click if ignored). */
     private void openMenu() {
-        click(MENU_BUTTON);
-        clickable(LOGOUT); // any menu item appearing means the panel is open
+        clickUntilVisible(MENU_BUTTON, LOGOUT); // a menu item appearing means the panel is open
     }
 
     /** Logs out via the menu, returning to the login screen. */
@@ -90,7 +89,7 @@ public class InventoryPage extends BasePage {
     public InventoryPage resetAppState() {
         openMenu();
         jsClick(RESET); // a menu onClick action with nothing to navigate to; JS makes it reliable
-        click(MENU_CLOSE);
+        clickUntilGone(MENU_CLOSE);
         return this;
     }
 
